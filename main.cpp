@@ -14,7 +14,7 @@ const char *password = "12345678";
 // IPAddress staticIP(172,16,43,200);
 // IPAddress gateway(172,16,43,254);
 // IPAddress subnet(255,255,252,0);
-// 12345678
+
 String webPageStop =
     {
         "<!DOCTYPE html>"
@@ -132,7 +132,7 @@ String webPageStop =
         "<h2>Status : Stopped </h2>"
         "</div>"
         "<a href='/Start' class='btn-sub'>Start</a>"
-        "<a href='/Stop' class='btn-sub'>Reload</a>"
+        "<a href='/Stop' class='btn-sub'>Stop</a>"
         "</div>"
         "<div class="
         "footer"
@@ -244,10 +244,6 @@ String webPageTimer =
         "font-size: 2.5rem;"
         "color: #7B8087;"
         "}"
-        ".main-content {"
-        "border: #7b8087 solid;"
-        "border-radius: 12px;"
-        "}"
         " </style>"
         "</head>"
         "<body>"
@@ -270,7 +266,7 @@ String webPageTimer =
         "<a href='/Set_timer15'class='btn-sub btn-15'>60 minutes</a>"
         "<h2>Status : Running... </h2>"
         "</div>"
-        "<a href='/Stop' class='btn-sub'>Reload</a>"
+        "<a href='/Stop' class='btn-sub'>Stop</a>"
         "</div>"
         "<div class="
         "footer"
@@ -382,10 +378,6 @@ String webPagePleaseStart30 =
         "font-size: 2.5rem;"
         "color: #7B8087;"
         "}"
-        ".main-content {"
-        "border: #7b8087 solid;"
-        "border-radius: 12px;"
-        "}"
         " </style>"
         "</head>"
         "<body>"
@@ -409,7 +401,7 @@ String webPagePleaseStart30 =
         "<h2>Status : Please Start 30 minutes !!! </h2>"
         "</div>"
         "<a href='/Start' class='btn-sub'>Start</a>"
-        "<a href='/Stop' class='btn-sub'>Reload</a>"
+        "<a href='/Stop' class='btn-sub'>Stop</a>"
         "</div>"
         "<div class="
         "footer"
@@ -520,10 +512,6 @@ String webPagePleaseStart60 =
         "font-size: 2.5rem;"
         "color: #7B8087;"
         "}"
-        ".main-content {"
-        "border: #7b8087 solid;"
-        "border-radius: 12px;"
-        "}"
         " </style>"
         "</head>"
         "<body>"
@@ -547,7 +535,7 @@ String webPagePleaseStart60 =
         "<h2>Status : Please Start 60 minutes !!! </h2>"
         "</div>"
         "<a href='/Start' class='btn-sub'>Start</a>"
-        "<a href='/Stop' class='btn-sub'>Reload</a>"
+        "<a href='/Stop' class='btn-sub'>Stop</a>"
         "</div>"
         "<div class="
         "footer"
@@ -574,6 +562,7 @@ void Set_timer60()
 }
 void Stop()
 {
+    value = 2;
     digitalWrite(4, LOW);
     server.send(200, "text/html", webPageStop);
 }
@@ -584,9 +573,14 @@ void Start()
     {
         digitalWrite(4, HIGH);
         server.send(200, "text/html", webPageTimer);
-        for (int i = 0; i <= 30; i++)
+        for (int i = 0; i <= 1800; i++)
         {
-            delay(60000);
+            server.handleClient();
+            if (value == 2)
+            {
+                break;
+            }
+            delay(1000);
         }
         digitalWrite(4, LOW);
     }
@@ -595,9 +589,14 @@ void Start()
     {
         digitalWrite(4, HIGH);
         server.send(200, "text/html", webPageTimer);
-        for (int i = 0; i <= 60; i++)
+        for (int i = 0; i <= 3600; i++)
         {
-            delay(60000);
+            server.handleClient();
+            if (value == 2)
+            {
+                break;
+            }
+            delay(1000);
         }
         digitalWrite(4, LOW);
     }
