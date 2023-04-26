@@ -14,7 +14,7 @@ const char *password = "12345678";
 // IPAddress staticIP(172,16,43,200);
 // IPAddress gateway(172,16,43,254);
 // IPAddress subnet(255,255,252,0);
-
+// 12345678
 String webPageStop =
     {
         "<!DOCTYPE html>"
