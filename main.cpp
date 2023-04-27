@@ -564,8 +564,9 @@ void Set_timer60()
 void Stop()
 {
     value = 2;
-    digitalWrite(4, LOW);
+    digitalWrite(2, LOW);
     server.send(200, "text/html", webPageStop);
+    Status = 0;
 }
 void updateStatus()
 {
@@ -584,7 +585,7 @@ void Start()
     delay(10);
     if (value == 0)
     {
-        digitalWrite(4, HIGH);
+        digitalWrite(2, HIGH);
         Status = 1;
         server.send(200, "text/html", webPageTimer);
         for (int i = 0; i <= 1800; i++)
@@ -596,13 +597,13 @@ void Start()
             }
             delay(1000);
         }
-        digitalWrite(4, LOW);
+        digitalWrite(2, LOW);
         Status = 0;
     }
     delay(10);
     if (value == 1)
     {
-        digitalWrite(4, HIGH);
+        digitalWrite(2, HIGH);
         Status = 1;
         server.send(200, "text/html", webPageTimer);
         for (int i = 0; i <= 3600; i++)
@@ -614,15 +615,15 @@ void Start()
             }
             delay(1000);
         }
-        digitalWrite(4, LOW);
+        digitalWrite(2, LOW);
         Status = 0;
     }
 }
 void setup()
 {
     // pinMode(0, OUTPUT);
-    pinMode(4, OUTPUT);
-    digitalWrite(4, LOW);
+    pinMode(2, OUTPUT);
+    digitalWrite(2, LOW);
 
     Serial.begin(115200);
     //  WiFi.config(staticIP, gateway, subnet);
