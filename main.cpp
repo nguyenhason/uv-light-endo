@@ -132,7 +132,7 @@ String webPageStop =
         "<h2>Status : Stopped </h2>"
         "</div>"
         "<a href='/Start' class='btn-sub'>Start</a>"
-        "<a href='/Stop' class='btn-sub'>Stop</a>"
+        "<a href='/Update' class='btn-sub'>Check Status</a>"
         "</div>"
         "<div class="
         "footer"
@@ -264,9 +264,10 @@ String webPageTimer =
         ">"
         "<a href='/Set_timer10' class='btn-sub btn-10'>30 minutes</a>"
         "<a href='/Set_timer15'class='btn-sub btn-15'>60 minutes</a>"
-        "<h2>Status : Running... </h2>"
+        "<h2>Status : Running...^^ </h2>"
         "</div>"
         "<a href='/Stop' class='btn-sub'>Stop</a>"
+        "<a href='/Update' class='btn-sub'>Check Status</a>"
         "</div>"
         "<div class="
         "footer"
@@ -401,7 +402,7 @@ String webPagePleaseStart30 =
         "<h2>Status : Please Start 30 minutes !!! </h2>"
         "</div>"
         "<a href='/Start' class='btn-sub'>Start</a>"
-        "<a href='/Stop' class='btn-sub'>Stop</a>"
+        "<a href='/Stop' class='btn-sub'>Back</a>"
         "</div>"
         "<div class="
         "footer"
@@ -535,7 +536,7 @@ String webPagePleaseStart60 =
         "<h2>Status : Please Start 60 minutes !!! </h2>"
         "</div>"
         "<a href='/Start' class='btn-sub'>Start</a>"
-        "<a href='/Stop' class='btn-sub'>Stop</a>"
+        "<a href='/Stop' class='btn-sub'>Back</a>"
         "</div>"
         "<div class="
         "footer"
@@ -566,12 +567,25 @@ void Stop()
     digitalWrite(4, LOW);
     server.send(200, "text/html", webPageStop);
 }
+void updateStatus()
+{
+    if (Status == 0)
+    {
+        server.send(200, "text/html", webPageStop);
+    }
+    else
+    {
+        server.send(200, "text/html", webPageTimer);
+    }
+}
+
 void Start()
 {
     delay(10);
     if (value == 0)
     {
         digitalWrite(4, HIGH);
+        Status = 1;
         server.send(200, "text/html", webPageTimer);
         for (int i = 0; i <= 1800; i++)
         {
@@ -583,11 +597,13 @@ void Start()
             delay(1000);
         }
         digitalWrite(4, LOW);
+        Status = 0;
     }
     delay(10);
     if (value == 1)
     {
         digitalWrite(4, HIGH);
+        Status = 1;
         server.send(200, "text/html", webPageTimer);
         for (int i = 0; i <= 3600; i++)
         {
@@ -599,6 +615,7 @@ void Start()
             delay(1000);
         }
         digitalWrite(4, LOW);
+        Status = 0;
     }
 }
 void setup()
@@ -636,6 +653,7 @@ void setup()
     server.on("/Set_timer15", Set_timer60);
     server.on("/Start", Start);
     server.on("/Stop", Stop);
+    server.on("/Update", updateStatus);
     server.begin();
 }
 void loop()
